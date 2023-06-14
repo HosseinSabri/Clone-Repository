@@ -1,0 +1,35 @@
+import os
+import sys
+import time
+import subprocess
+import pyautogui
+
+def shutdown():
+    # در صورتی که سیستم عامل ویندوز باشد
+    if sys.platform == 'win32':
+        subprocess.call(['shutdown', '/s', '/t', '1'])
+    # در صورتی که سیستم عامل لینوکس باشد
+    elif sys.platform == 'linux' or sys.platform == 'linux2':
+        subprocess.call(['sudo', 'shutdown', '-h', 'now'])
+    # در صورتی که سیستم عامل مک باشد
+    elif sys.platform == 'darwin':
+        subprocess.call(['sudo', 'shutdown', '-h', 'now'])
+    else:
+        print('Could not recognize the operating system.')
+
+if __name__ == '__main__':
+    time.sleep(5)  # تا فرد دست از کامپیوتر بردازد، 5 ثانیه صبر کنید
+    pyautogui.press('win')  # فشار دادن دکمه ویندوز در ویندوز
+    pyautogui.typewrite('cmd')  # تایپ "cmd" در جستجوی منوی شروع
+    pyautogui.press('enter')  # فشار دادن دکمه اینتر برای باز کردن کامند پرومپت
+    time.sleep(1)  # صبر کنید تا کامند پرومپت باز شود
+    pyautogui.typewrite('cd ')  # تایپ "cd " تا به روت دایرکتوری برسیم
+    pyautogui.typewrite(os.path.abspath(os.path.dirname(__file__)))  # تایپ آدرس کامل پوشه فعلی
+    pyautogui.press('enter')  # فشار دادن دکمه اینتر برای تأیید
+    pyautogui.typewrite('pyinstaller --onefile shutdown.py')  # تایپ دستور PyInstaller برای ساخت فایل اجرایی
+    pyautogui.press('enter')  # فشار دادن دکمه اینتر برای شروع ساخت فایل
+    time.sleep(10)  # صبر کنید تا PyInstaller فایل اجرایی را بسازد
+    pyautogui.typewrite('dist\\shutdown.exe')  # تایپ آدرس فایل اجرایی
+    pyautogui.press('enter')  # فشار دادن دکمه اینتر برای اجرای فایل
+    time.sleep(1)  # صبر کنید تا فایل اجرایی باز شود
+    shutdown()  # فراخوانی تابع shutdown() برای خاموش کردن سیستم
